@@ -40,6 +40,11 @@ Build a Roblox-style 3D sandbox world game where the player explores a varied wo
   - Shift sprint
   - Camera drag rotation
   - Mouse wheel zoom
+- Default character test:
+  - Pikachu GLB loaded from `Pokemon-3D-api/assets`
+  - Draco decoding configured through Google's public Draco decoder CDN
+  - Embedded animation clips are mapped when present
+  - Procedural bob/attack motion is used as fallback
 - HUD:
   - Current biome
   - Nearest landmark
@@ -61,10 +66,9 @@ Build a Roblox-style 3D sandbox world game where the player explores a varied wo
 ## Next Work
 
 1. Add a character selection screen.
-2. Add GLB loading through Three.js `GLTFLoader`.
-3. Replace the placeholder capsule avatar with selected monster models.
-4. Add animation support with `AnimationMixer`.
-5. Add Rapier physics for terrain/object colliders.
+2. Add more Pokemon or monster character entries.
+3. Normalize animation clip names per model.
+4. Add Rapier physics for terrain/object colliders.
 6. Move world content into JSON manifests:
    - terrain settings
    - biome rules

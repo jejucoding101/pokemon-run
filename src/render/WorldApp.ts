@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { InputController } from '../input/InputController';
 import { PlayerController } from '../player/PlayerController';
 import { BIOMES, getBiomeAt } from '../world/biomes';
-import { createLandmarks, buildLandmarkObjects, type Landmark } from '../world/landmarks';
+import { buildLandmarkObjects, createLandmarks, type Landmark } from '../world/landmarks';
 import { buildBiomeProps } from '../world/props';
 import { createTerrain, getTerrainHeight } from '../world/terrain';
 import { CameraRig } from './CameraRig';
@@ -108,7 +108,7 @@ export class WorldApp {
     const { x, z } = this.player.object.position;
     const biome = getBiomeAt(x, z);
     const nearest = this.getNearestLandmark();
-    this.statusSubtitle.textContent = `${biome.label} · 가까운 장소: ${nearest.label} ${nearest.distance.toFixed(0)}m`;
+    this.statusSubtitle.textContent = `${biome.label} - nearest: ${nearest.label} ${nearest.distance.toFixed(0)}m`;
   }
 
   private getNearestLandmark(): { label: string; distance: number } {
@@ -133,8 +133,8 @@ export class WorldApp {
     chip.innerHTML = `
       <span class="status-dot"></span>
       <span class="status-text">
-        <span class="status-title">월드 프로토타입</span>
-        <span class="status-subtitle">시작 초원 · 가까운 장소 확인 중</span>
+        <span class="status-title">Pikachu World Prototype</span>
+        <span class="status-subtitle">Loading Pikachu...</span>
       </span>
     `;
     hud.append(chip);
@@ -159,7 +159,7 @@ export class WorldApp {
 
     const hint = document.createElement('div');
     hint.className = 'hint-strip';
-    hint.textContent = 'WASD 이동 · Space 점프 · Shift 달리기 · 드래그 카메라 회전 · 휠 줌';
+    hint.textContent = 'WASD move - Space jump - Shift sprint - F / left click attack - drag camera - wheel zoom';
     hud.append(hint);
 
     this.shell.append(hud);
