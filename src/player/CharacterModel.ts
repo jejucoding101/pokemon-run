@@ -11,7 +11,7 @@ const CLIP_ALIASES: Record<AnimationKey, string[]> = {
   idle: ['idle', 'wait', 'stand', 'loop'],
   run: ['run', 'walk', 'move'],
   jump: ['jump', 'fall'],
-  attack: ['attack', 'tackle', 'physical', 'special'],
+  attack: ['attack', 'tackle', 'physical', 'special', 'impactrueno'],
 };
 
 export class CharacterModel {
@@ -39,7 +39,6 @@ export class CharacterModel {
     if (gltf.animations.length > 0) {
       this.mixer = new THREE.AnimationMixer(model);
       this.mapActions(gltf.animations);
-      this.play('idle');
       console.info(
         `Loaded Pikachu animation clips: ${gltf.animations.map((clip) => clip.name || '(unnamed)').join(', ')}`,
       );
@@ -89,12 +88,13 @@ export class CharacterModel {
     for (const key of Object.keys(CLIP_ALIASES) as AnimationKey[]) {
       const clip = this.findClip(clips, CLIP_ALIASES[key]);
       if (clip && this.mixer) {
-        this.actions.set(key, this.mixer.clipAction(clip));
+        const action = this.mixer.clipAction(clip);
+        if (key === 'attack') {
+          action.setLoop(THREE.LoopOnce, 1);
+          action.clampWhenFinished = false;
+        }
+        this.actions.set(key, action);
       }
-    }
-
-    if (!this.actions.has('idle') && clips[0] && this.mixer) {
-      this.actions.set('idle', this.mixer.clipAction(clips[0]));
     }
   }
 
@@ -107,7 +107,13 @@ export class CharacterModel {
 
   private play(key: AnimationKey): void {
     const next = this.actions.get(key) ?? this.actions.get('idle');
-    if (!next || next === this.activeAction) {
+    if (!next) {
+      this.activeAction?.fadeOut(0.12);
+      this.activeAction = null;
+      return;
+    }
+
+    if (next === this.activeAction) {
       return;
     }
 
